@@ -2,9 +2,8 @@ import LoadingScreen from "@/components/loadingscreen";
 
 export default function Loading() {
     return (
-    <div className="grid place-items-center items-center">
-        <Loading />
-    </div>
+        <div className="grid place-items-center items-center">
+            <LoadingScreen />
+        </div>
     )
-
 }
