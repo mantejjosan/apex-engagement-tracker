@@ -53,7 +53,10 @@ export default function HomePage() {
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <Logo size="sm" />
+              <div className="shrink-0">
+                <Logo size="sm" />
+
+              </div>
               <div>
                 <h1 className="text-xl font-bold">Apex 2025</h1>
                 {student && (
@@ -72,16 +75,17 @@ export default function HomePage() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-2xl mx-auto px-4 py-6">
+      <div className="max-w-2xl mx-auto px-4 py-6 w-[95vw]">
         {student && (
-          <div className="rounded-xl p-6 mb-6 text-black bg-card shadow-accent-foreground ">
-            <h2 className="text-2xl font-bold mb-1">Welcome {student.name}!</h2>
+          <div className="rounded-xl p-6 mb-6 text-black bg-card w-1/2 shadow-accent-foreground ">
+            <h3 className="text-muted-foreground">Welcome</h3>
+            <h2 className="text-2xl font-bold mb-1">{student.name}!</h2>
             <p className="text-muted-foreground">{student.school}</p>
           </div>
         )}
 
         {/* Participation History */}
-        <div className="bg-card rounded-xl shadow-lg p-6">
+        <div className="noisy-texture rounded-xl p-6">
           <ParticipationHistory />
         </div>
 

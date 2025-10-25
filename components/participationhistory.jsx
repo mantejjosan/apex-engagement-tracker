@@ -81,13 +81,11 @@ export default function ParticipationHistory() {
 
   if (participations.length === 0) {
     return (
-      <div className="text-center py-16 px-4">
+      <div className="text-center pt-16 px-4">
         <div className="text-6xl mb-4">🎪</div>
         <h3 className="text-2xl font-bold mb-2">No Memories Yet!</h3>
         <p className="text-gray-600 text-lg mb-6">{randomMessage}</p>
-        <div className="inline-block px-6 py-3 bg-primary text-white rounded-full font-semibold">
-          Scan a QR to get started
-        </div>
+        
       </div>
     )
   }
@@ -122,7 +120,7 @@ export default function ParticipationHistory() {
                 )}
               </div>
               <div className="ml-4">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-amber-800 flex items-center justify-center text-white font-bold">
                   ✓
                 </div>
               </div>

@@ -82,9 +82,9 @@ export default function QRScanner({ onScan, onError }) {
         .antique-frame {
           position: relative;
           padding: 24px;
-          background: linear-gradient(135deg, #8b7355 0%, #6b5644 50%, #8b7355 100%);
+          background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 50%, var(--accent) 100%);
           border-radius: 8px;
-          box-shadow: 
+          box-shadow:
             inset 0 0 20px rgba(0,0,0,0.3),
             inset 0 2px 4px rgba(255,255,255,0.2),
             0 8px 24px rgba(0,0,0,0.3);
@@ -93,9 +93,9 @@ export default function QRScanner({ onScan, onError }) {
         .frame-inner {
           position: relative;
           padding: 16px;
-          background: linear-gradient(to bottom, #f4e4c1 0%, #e8d4a8 100%);
+          background: linear-gradient(to bottom, var(--background) 0%, var(--muted) 100%);
           border-radius: 4px;
-          box-shadow: 
+          box-shadow:
             inset 0 2px 8px rgba(0,0,0,0.15),
             0 2px 4px rgba(0,0,0,0.1);
         }
@@ -105,7 +105,7 @@ export default function QRScanner({ onScan, onError }) {
           position: absolute;
           width: 40px;
           height: 40px;
-          background: radial-gradient(circle at center, #d4af37 0%, #b8941f 50%, #8b7355 100%);
+          background: radial-gradient(circle at center, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
           z-index: 10;
         }
 
@@ -117,7 +117,7 @@ export default function QRScanner({ onScan, onError }) {
           transform: translate(-50%, -50%);
           width: 24px;
           height: 24px;
-          background: radial-gradient(circle, #f4e4c1 0%, transparent 70%);
+          background: radial-gradient(circle, var(--background) 0%, transparent 70%);
           border-radius: 50%;
         }
 
@@ -157,7 +157,7 @@ export default function QRScanner({ onScan, onError }) {
           left: 0;
           right: 0;
           bottom: 0;
-          background: 
+          background:
             repeating-linear-gradient(
               90deg,
               transparent,
@@ -172,15 +172,15 @@ export default function QRScanner({ onScan, onError }) {
         /* QR Reader Styling */
         #qr-reader {
           border: none !important;
-          background: white;
+          background: var(--card);
           border-radius: 4px;
           overflow: hidden;
         }
         
         #qr-reader__dashboard_section_csr button {
-          background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%) !important;
-          color: #3d2817 !important;
-          border: 2px solid #8b7355 !important;
+          background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%) !important;
+          color: var(--foreground) !important;
+          border: 2px solid var(--accent) !important;
           padding: 12px 24px !important;
           border-radius: 6px !important;
           font-weight: 700 !important;
@@ -190,7 +190,7 @@ export default function QRScanner({ onScan, onError }) {
         }
         
         #qr-reader__dashboard_section_csr button:hover {
-          background: linear-gradient(135deg, #e8c74a 0%, #c9a838 100%) !important;
+          background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%) !important;
           transform: translateY(-1px);
           box-shadow: 0 6px 12px rgba(0,0,0,0.25) !important;
         }
@@ -212,10 +212,10 @@ export default function QRScanner({ onScan, onError }) {
         }
 
         #qr-reader__scan_region {
-          border: 3px solid #d4af37 !important;
-          box-shadow: 
-            0 0 0 4px rgba(212, 175, 55, 0.2),
-            inset 0 0 20px rgba(212, 175, 55, 0.1) !important;
+          border: 3px solid var(--primary) !important;
+          box-shadow:
+            0 0 0 4px rgba(0,0,0,0.2),
+            inset 0 0 20px rgba(0,0,0,0.1) !important;
           animation: shimmer 2s ease-in-out infinite;
         }
       `}</style>

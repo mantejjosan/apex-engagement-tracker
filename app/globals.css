@@ -197,4 +197,10 @@
     background-repeat: repeat;
     background-size: 150px;
   }
+  .noisy-texture {
+    background-image: url("/noisy-texture.png");
+    background-size: cover;
+    background-repeat: repeat;
+    background-size: 300px;
+  }
 }

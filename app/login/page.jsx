@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Logo from '@/components/logo'
+import PoweredBy from '@/components/poweredby'
 
 
 export default function LoginPage() {
@@ -87,6 +88,10 @@ export default function LoginPage() {
           Check your email for your Student ID
         </p>
       </div>
+      <aside className='fixed bottom-0 right-0 left-0'>
+        <PoweredBy />
+
+      </aside>
     </div>
   )
 }

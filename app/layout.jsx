@@ -1,3 +1,4 @@
+import PoweredBy from "@/components/poweredby";
 import "./globals.css";
 
 export const metadata = {
@@ -11,7 +12,13 @@ export default function RootLayout({ children }) {
       <body
         className={`font-sans food-texture antialiased`}
       >
-        {children}
+        <div className="flex flex-col">
+          <main>
+            {children}
+          </main>
+
+         
+        </div>
       </body>
     </html>
   );
