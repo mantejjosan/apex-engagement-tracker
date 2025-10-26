@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import QRScanner from '@/components/qrscanner'
 import Logo from '@/components/logo'
+import Navbar from '@/components/navbar'
 
 export default function ScanPage() {
     const searchParams = useSearchParams()
@@ -123,25 +124,7 @@ export default function ScanPage() {
     return (
         <div className="min-h-screen ">
             {/* Header */}
-            <div className="">
-                <div className="max-w-4xl mx-auto px-4 py-4">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                            <div className="shrink-0">
-
-                                <Logo size="sm" />
-                            </div>
-                            <h1 className="text-xl flex-1 font-bold">Apex 2025</h1>
-                        </div>
-                        <button
-                            onClick={handleGoHome}
-                            className="text-sm text-gray-600 hover:text-gray-900 px-3 py-1 rounded-lg hover:bg-gray-100"
-                        >
-                            Home
-                        </button>
-                    </div>
-                </div>
-            </div>
+            <Navbar />                        
 
             {/* Main Content */}
             <div className="max-w-2xl mx-auto px-4 py-6">

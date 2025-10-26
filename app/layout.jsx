@@ -1,5 +1,6 @@
 import PoweredBy from "@/components/poweredby";
 import "./globals.css";
+import Menu from "@/components/menu";
 
 export const metadata = {
   title: "Apex Engagement Tracking PWA",
@@ -12,13 +13,10 @@ export default function RootLayout({ children }) {
       <body
         className={`font-sans food-texture antialiased`}
       >
-        <div className="flex flex-col">
-          <main>
-            {children}
-          </main>
-
+        
          
-        </div>
+            {children}
+         
       </body>
     </html>
   );

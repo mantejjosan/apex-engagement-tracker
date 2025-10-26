@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Logo from './logo'
 
 const EMPTY_MESSAGES = [
   "🎯 Go hunt 'em all!",
@@ -60,7 +61,7 @@ export default function ParticipationHistory() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        <Logo size='md' animated />
       </div>
     )
   }
