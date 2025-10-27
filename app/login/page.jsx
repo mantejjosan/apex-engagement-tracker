@@ -3,6 +3,8 @@ import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Logo from '@/components/logo'
 import PoweredBy from '@/components/poweredby'
+import Link from 'next/link'
+import { register } from 'next/dist/next-devtools/userspace/pages/pages-dev-overlay-setup'
 
 
 export default function LoginPage() {
@@ -58,14 +60,14 @@ export default function LoginPage() {
 
         </div>
         <h1 className="text-3xl font-bold text-center  mt-4">Apex</h1>
-        <p className="text-gray-600 text-center mb-6">Enter your Student ID</p>
+        <p className="text-gray-500 text-center mb-6">Enter your Unique 8 digit ID</p>
 
         <form onSubmit={handleSubmit}>
           <input
             type="text"
             value={studentId}
             onChange={(e) => setStudentId(e.target.value.toLowerCase())}
-            placeholder="e.g., a3b4c5d6"
+            placeholder="example: a3b4c5d6"
             maxLength={8}
             className="w-full px-4 py-3 border rounded-lg mb-4 text-center text-xl font-mono"
             disabled={loading}
@@ -85,8 +87,12 @@ export default function LoginPage() {
         </form>
 
         <p className="text-gray-500 text-sm text-center mt-4">
-          Check your email for your Student ID
+          Check your email for your 8 digit ID
         </p>
+          <p className="text-green-500 flex gap-2">
+            <div className="text-muted-foreground">Haven't got one? </div>
+            <Link href="/register">REGISTER NOW</Link>
+          </p>
       </div>
       <aside className='fixed bottom-0 right-0 left-0'>
         <PoweredBy />
