@@ -51,13 +51,17 @@ export default function HomePage() {
       {/* Main Content */}
       <div className="max-w-2xl mx-auto px-4 py-6 w-[95vw]">
         {student && (
-          <div className="rounded-xl p-6 mb-6 text-black bg-card w-1/2 shadow-accent-foreground ">
+          <div className="rounded-xl p-6 mb-6 border-4 text-black bg-card w-1/2 shadow-accent-foreground ">
             <h3 className="text-muted-foreground">Welcome</h3>
             <h2 className="text-2xl font-bold mb-1">{student.name}!</h2>
             <p className="text-muted-foreground">{student.school}</p>
           </div>
         )}
 
+        {/*leaderboard*/}
+        <div className="rounded-xl">
+          <LeaderBoard />
+        </div>
 
         {/* Quick Actions */}
         <div className="mt-6 text-center">

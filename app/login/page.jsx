@@ -91,7 +91,7 @@ export default function LoginPage() {
         </p>
           <p className="text-green-500 flex gap-2">
             <div className="text-muted-foreground">Haven't got one? </div>
-            <Link href="/register">REGISTER NOW</Link>
+            <Link href={`/register?redirect=${encodeURIComponent(redirect)}`}>REGISTER NOW</Link>
           </p>
       </div>
       <aside className='fixed bottom-0 right-0 left-0'>

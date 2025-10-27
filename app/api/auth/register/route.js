@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
+import {v4 as uuidv4 } from "uuid";
+import { sendStudentIdEmail } from "@/lib/mail";
 
 export async function POST(req) {
   try {
@@ -11,6 +13,9 @@ export async function POST(req) {
 
     const body = await req.json();
     const { name, school, class: studentClass, roll_number, age, gender, crn, email, type } = body;
+
+    const id = uuidv4();
+    const eightDigitId = id.replace(/-/g, "").slice(0,8);
 
     const { data, error } = await supabase
       .from("students")
@@ -30,8 +35,10 @@ export async function POST(req) {
       .select()
       .single();
 
-    if (error) throw error;
+      if (error) throw error;
+      sendStudentIdEmail(email, name, eightDigitId).catch(console.error)
 
+    
     // Create the same session cookie as in login route
     const cookieStore = await cookies();
     const sessionData = {
@@ -40,14 +47,14 @@ export async function POST(req) {
       school: data.school,
       loginTime: new Date().toISOString(),
     };
-
+    
     cookieStore.set("apex_session", JSON.stringify(sessionData), {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       maxAge: 60 * 60 * 8,
     });
-
+    
     return NextResponse.json({
       success: true,
       message: "Registered and logged in successfully",
