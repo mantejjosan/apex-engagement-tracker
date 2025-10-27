@@ -5,17 +5,40 @@ import { Html5QrcodeScanner } from 'html5-qrcode'
 
 export default function QRScanner({ onScan, onError }) {
   const scannerRef = useRef(null)
-  const [hasCamera, setHasCamera] = useState(true)
+  const [ready, setReady] = useState(false)
+  const [permissionState, setPermissionState] = useState('prompt')
 
+  // 🔍 Step 1: Check camera permission
   useEffect(() => {
-    // Check if camera is available
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      setHasCamera(false)
+    async function checkPermission() {
+      try {
+        const status = await navigator.permissions.query({ name: 'camera' })
+        setPermissionState(status.state)
+        status.onchange = () => setPermissionState(status.state)
+      } catch {
+        // Safari or some older browsers may not support Permissions API
+        setPermissionState('unknown')
+      }
+      setReady(true)
+    }
+
+    checkPermission()
+  }, [])
+
+  // 🎥 Step 2: Initialize scanner when permission allows
+  useEffect(() => {
+    if (!ready) return
+    if (permissionState === 'denied') {
+      console.warn('Camera permission denied')
       return
     }
 
+    const elementId = 'qr-reader'
+    const el = document.getElementById(elementId)
+    if (el) el.innerHTML = '' // clear any leftover DOM
+
     const scanner = new Html5QrcodeScanner(
-      'qr-reader',
+      elementId,
       {
         fps: 10,
         qrbox: { width: 250, height: 250 },
@@ -23,206 +46,49 @@ export default function QRScanner({ onScan, onError }) {
         showTorchButtonIfSupported: true,
         rememberLastUsedCamera: true,
         defaultZoomValueIfSupported: 2,
-        videoConstraints: {
-          facingMode: {ideal: "environment"}
-        }
+        videoConstraints: { facingMode: { ideal: 'environment' } },
       },
       false
     )
 
     scanner.render(
       (decodedText) => {
-        // Success callback
-        console.log('QR Code detected:', decodedText)
         onScan(decodedText)
-        
-        // Stop scanner after successful scan
-        scanner.clear().catch(err => console.error('Error clearing scanner:', err))
+        scanner.clear().catch(console.error)
       },
-      (error) => {
-        // Error callback (can be ignored for most cases)
-        // This fires frequently during scanning, so we don't log it
-      }
+      (error) => onError?.(error)
     )
 
     scannerRef.current = scanner
 
+    // 🧹 Cleanup on unmount or reinit
     return () => {
-      if (scannerRef.current) {
-        scannerRef.current.clear().catch(err => console.error('Cleanup error:', err))
-      }
+      scannerRef.current?.clear()
+        .then(() => {
+          const el = document.getElementById(elementId)
+          if (el) el.innerHTML = ''
+        })
+        .catch(console.error)
     }
-  }, [onScan])
+  }, [ready, permissionState, onScan, onError])
 
-  if (!hasCamera) {
+  // 🚫 Step 3: Handle denied state
+  if (permissionState === 'denied') {
     return (
       <div className="text-center py-12">
-        <div className="text-6xl mb-4">📷</div>
-        <h3 className="text-xl font-bold mb-2">Camera Not Available</h3>
-        <p className="text-gray-600 mb-4">
-          Please scan the QR code with your camera app or Google Lens, <br />
-          then open the link to participate.
+        <div className="text-6xl mb-4">🚫</div>
+        <h3 className="text-xl font-bold mb-2">Camera Access Denied</h3>
+        <p className="text-gray-600">
+          Please enable camera access in your browser settings and reload this page.
         </p>
       </div>
     )
   }
 
+  // 🟢 Step 4: Render scanner container
   return (
     <div className="w-full">
-      {/* Antique Wooden Frame */}
-      <div className="antique-frame">
-        <div className="frame-corner frame-corner-tl"></div>
-        <div className="frame-corner frame-corner-tr"></div>
-        <div className="frame-corner frame-corner-bl"></div>
-        <div className="frame-corner frame-corner-br"></div>
-        
-        <div className="frame-inner">
-          <div id="qr-reader" className="w-full"></div>
-        </div>
-      </div>
-      
-      <style jsx global>{`
-        /* Antique Frame Styling */
-        .antique-frame {
-          position: relative;
-          padding: 24px;
-          background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 50%, var(--accent) 100%);
-          border-radius: 8px;
-          box-shadow:
-            inset 0 0 20px rgba(0,0,0,0.3),
-            inset 0 2px 4px rgba(255,255,255,0.2),
-            0 8px 24px rgba(0,0,0,0.3);
-        }
-
-        .frame-inner {
-          position: relative;
-          padding: 16px;
-          background: linear-gradient(to bottom, var(--background) 0%, var(--muted) 100%);
-          border-radius: 4px;
-          box-shadow:
-            inset 0 2px 8px rgba(0,0,0,0.15),
-            0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        /* Ornate Corner Decorations */
-        .frame-corner {
-          position: absolute;
-          width: 40px;
-          height: 40px;
-          background: radial-gradient(circle at center, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
-          z-index: 10;
-        }
-
-        .frame-corner::before {
-          content: '';
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          width: 24px;
-          height: 24px;
-          background: radial-gradient(circle, var(--background) 0%, transparent 70%);
-          border-radius: 50%;
-        }
-
-        .frame-corner-tl {
-          top: -8px;
-          left: -8px;
-          border-radius: 50% 8px 8px 8px;
-          box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .frame-corner-tr {
-          top: -8px;
-          right: -8px;
-          border-radius: 8px 50% 8px 8px;
-          box-shadow: -2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .frame-corner-bl {
-          bottom: -8px;
-          left: -8px;
-          border-radius: 8px 8px 8px 50%;
-          box-shadow: 2px -2px 4px rgba(0,0,0,0.3);
-        }
-
-        .frame-corner-br {
-          bottom: -8px;
-          right: -8px;
-          border-radius: 8px 8px 50% 8px;
-          box-shadow: -2px -2px 4px rgba(0,0,0,0.3);
-        }
-
-        /* Wood grain texture (subtle) */
-        .antique-frame::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background:
-            repeating-linear-gradient(
-              90deg,
-              transparent,
-              transparent 2px,
-              rgba(0,0,0,0.03) 2px,
-              rgba(0,0,0,0.03) 4px
-            );
-          border-radius: 8px;
-          pointer-events: none;
-        }
-
-        /* QR Reader Styling */
-        #qr-reader {
-          border: none !important;
-          background: var(--card);
-          border-radius: 4px;
-          overflow: hidden;
-        }
-        
-        #qr-reader__dashboard_section_csr button {
-          background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%) !important;
-          color: var(--foreground) !important;
-          border: 2px solid var(--accent) !important;
-          padding: 12px 24px !important;
-          border-radius: 6px !important;
-          font-weight: 700 !important;
-          cursor: pointer !important;
-          text-shadow: 0 1px 2px rgba(255,255,255,0.3) !important;
-          box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
-        }
-        
-        #qr-reader__dashboard_section_csr button:hover {
-          background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%) !important;
-          transform: translateY(-1px);
-          box-shadow: 0 6px 12px rgba(0,0,0,0.25) !important;
-        }
-
-        #qr-reader video {
-          border-radius: 4px !important;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
-        }
-
-        #qr-reader__dashboard_section_swaplink {
-          display: none !important;
-        }
-
-        /* Scanning overlay effect */
-        @keyframes shimmer {
-          0% { opacity: 0.3; }
-          50% { opacity: 0.6; }
-          100% { opacity: 0.3; }
-        }
-
-        #qr-reader__scan_region {
-          border: 3px solid var(--primary) !important;
-          box-shadow:
-            0 0 0 4px rgba(0,0,0,0.2),
-            inset 0 0 20px rgba(0,0,0,0.1) !important;
-          animation: shimmer 2s ease-in-out infinite;
-        }
-      `}</style>
+      <div id="qr-reader" className="w-full"></div>
     </div>
   )
 }

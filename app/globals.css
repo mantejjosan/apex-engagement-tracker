@@ -204,3 +204,28 @@
     background-size: 300px;
   }
 }
+
+/* Make torch and stop buttons match your app style */
+#qr-reader button {
+  background-color: var(--color-secondary);        /* your primary color */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* Hover effect */
+#qr-reader button:hover {
+  background-color: var(--color-primary);        /* darker blue */
+}
+
+/* Optional: tweak spacing and font */
+#qr-reader__dashboard_section_csr button {
+  margin: 0 4px;
+  font-size: 14px;
+}
+
+
