@@ -21,7 +21,11 @@ export default function QRScanner({ onScan, onError }) {
         qrbox: { width: 250, height: 250 },
         aspectRatio: 1.0,
         showTorchButtonIfSupported: true,
-        formatsToSupport: ['QR_CODE']
+        rememberLastUsedCamera: true,
+        defaultZoomValueIfSupported: 2,
+        videoConstraints: {
+          facingMode: {ideal: "environment"}
+        }
       },
       false
     )
