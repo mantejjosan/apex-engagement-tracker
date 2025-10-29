@@ -1,39 +1,28 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
+import { supabase } from '@/lib/supabase/client'
 
 export async function GET() {
   try {
-    // Get session from cookie
     const cookieStore = await cookies()
     const sessionCookie = cookieStore.get('apex_session')
 
     if (!sessionCookie) {
-      return NextResponse.json(
-        { error: 'Not authenticated' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
     }
 
     const session = JSON.parse(sessionCookie.value)
     const studentId = session.studentId
 
-    // Create Supabase client
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    )
-
-    // Fetch participation with event details
     const { data: participations, error } = await supabase
-      .from('participation')
+      .from('participation') // ✅ correct table name
       .select(`
         id,
         timestamp,
         event_id,
         events (
           id,
-          name,
+          event_name,
           description
         )
       `)
@@ -48,10 +37,9 @@ export async function GET() {
       )
     }
 
-    // Format the response
     const formattedData = participations.map(p => ({
       id: p.id,
-      eventName: p.events?.name || 'Unknown Event',
+      eventName: p.events?.event_name || 'Unknown Event',
       eventDescription: p.events?.description,
       timestamp: p.timestamp
     }))
@@ -60,6 +48,7 @@ export async function GET() {
       success: true,
       participations: formattedData,
       student: {
+        id: studentId,
         name: session.name,
         school: session.school
       }
@@ -67,9 +56,6 @@ export async function GET() {
 
   } catch (error) {
     console.error('API error:', error)
-    return NextResponse.json(
-      { error: 'Server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Server error' }, { status: 500 })
   }
 }

@@ -47,6 +47,7 @@ export default function CollegeForm({ formData, setFormData, onSubmit }) {
             value={formData.email}
             onChange={handleChange}
             className="p-2 rounded-md border w-full"
+            required
           />
 
           <button

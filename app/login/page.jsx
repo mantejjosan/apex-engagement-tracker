@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Logo from '@/components/logo'
 import PoweredBy from '@/components/poweredby'
 import Link from 'next/link'
+import { ExternalLink } from 'lucide-react'
 import { register } from 'next/dist/next-devtools/userspace/pages/pages-dev-overlay-setup'
 
 
@@ -53,21 +54,21 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 ">
+    <div className="min-h-screen flex flex-col md:flex-row gap-4 items-center justify-center p-4 ">
       <div className="relative flex flex-col items-center bg-card rounded-xl shadow-xl p-8 w-full max-w-md">
         <div className="absolute -top-20 rotate-6">
             <Logo size="lg" animated/>
 
         </div>
         <h1 className="text-3xl font-bold text-center  mt-4">Apex</h1>
-        <p className="text-gray-500 text-center mb-6">Enter your Unique 8 digit ID</p>
+        <p className="text-sm text-center text-gray-500 mt-2 mb-6">Click 'REGISTER NOW' below to get your ID. Clubs can use Club Login</p>
 
         <form onSubmit={handleSubmit}>
           <input
             type="text"
             value={studentId}
             onChange={(e) => setStudentId(e.target.value.toLowerCase())}
-            placeholder="example: a3b4c5d6"
+            placeholder="8 character ID: a3b4c5d6"
             maxLength={8}
             className="w-full px-4 py-3 border rounded-lg mb-4 text-center text-xl font-mono"
             disabled={loading}
@@ -80,19 +81,27 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-semibold hover:bg-sidebar-primary disabled:opacity-50"
+            className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-semibold hover:bg-primary active:bg-primary disabled:opacity-50 "
           >
             {loading ? 'Verifying...' : 'Continue'}
           </button>
         </form>
 
         <p className="text-gray-500 text-sm text-center mt-4">
-          Check your email for your 8 digit ID
+          Check your email for your 8 character ID
         </p>
           <p className="text-green-500 flex gap-2">
             <div className="text-muted-foreground">Haven't got one? </div>
             <Link href={`/register?redirect=${encodeURIComponent(redirect)}`}>REGISTER NOW</Link>
           </p>
+      </div>
+      <div className="flex py-3 px-5 uppercase text-semibold bg-amber-400 rounded-lg hover:bg-primary active:bg-primary">
+        <div className="border-r-2 pr-2 mr-2 border-black">
+          <Link href={`/club-login`}>
+            Club Login
+          </Link>
+        </div>
+        <ExternalLink />
       </div>
       <aside className='fixed bottom-0 right-0 left-0'>
         <PoweredBy />

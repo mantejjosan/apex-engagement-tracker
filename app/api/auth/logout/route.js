@@ -7,6 +7,7 @@ export async function POST() {
     
     // Delete the session cookie
     cookieStore.delete('apex_session')
+    cookieStore.delete('apex_club_session')
 
     return NextResponse.json({
       success: true,

@@ -45,6 +45,7 @@ export default function SchoolForm({ formData, setFormData, onSubmit }) {
             value={formData.class}
             onChange={handleChange}
             className="p-2 rounded-md border w-full"
+            required
           />
           <input
             name="roll_number"
@@ -52,6 +53,7 @@ export default function SchoolForm({ formData, setFormData, onSubmit }) {
             value={formData.roll_number}
             onChange={handleChange}
             className="p-2 rounded-md border w-full"
+            required
           />
           <div className="flex gap-2">
             <select
@@ -72,6 +74,7 @@ export default function SchoolForm({ formData, setFormData, onSubmit }) {
               value={formData.age}
               onChange={handleChange}
               className="p-2 rounded-md border w-20"
+              required
             />
           </div>
           <input
@@ -81,6 +84,7 @@ export default function SchoolForm({ formData, setFormData, onSubmit }) {
             value={formData.email}
             onChange={handleChange}
             className="p-2 rounded-md border w-full"
+            required
           />
 
           <button

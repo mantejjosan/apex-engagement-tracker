@@ -13,6 +13,12 @@ export async function POST(req) {
 
     const body = await req.json();
     const { name, school, class: studentClass, roll_number, age, gender, crn, email, type } = body;
+    
+    if (!email || email.trim() === "") {
+      return NextResponse.json(
+        {error: "Email is required"}, {status: 400}
+      )
+    }
 
     const id = uuidv4();
     const eightDigitId = id.replace(/-/g, "").slice(0,8);
@@ -36,6 +42,7 @@ export async function POST(req) {
       .single();
 
       if (error) throw error;
+
       sendStudentIdEmail(email, name, eightDigitId).catch(console.error)
 
     

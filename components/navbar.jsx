@@ -1,7 +1,7 @@
 import Logo from "./logo"
 import Menu from "./menu"
 
-export default function Navbar({school=""}) {
+export default function Navbar({school="", club=""}) {
     return (
         <div className="">
         <div className="max-w-4xl mx-auto px-4 py-4">
@@ -16,6 +16,11 @@ export default function Navbar({school=""}) {
                 {school && (
                     <p className="text-sm text-gray-600">special invitation to {school}</p>
                 )}
+                {
+                  club && (
+                    <p className="text-sm text-gray-600">{club}</p>
+                  )
+                }
               </div>
             </div>
             
