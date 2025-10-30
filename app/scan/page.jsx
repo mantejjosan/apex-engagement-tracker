@@ -16,7 +16,7 @@ export default function ScanPage() {
     const [eventName, setEventName] = useState('')
     const [cooldownTime, setCooldownTime] = useState(null)
     const [showScanner, setShowScanner] = useState(!eventIdFromUrl)
-    const [scannerKey, setScannerKey] = useState(0) // 🔑 To force reinit of camera
+    const [scannerKey, setScannerKey] = useState(0) // ­ƒöæ To force reinit of camera
 
     useEffect(() => {
         // Auto-start scanner if user is on /scan route and permission is granted
@@ -105,7 +105,7 @@ export default function ScanPage() {
         setEventName('')
         setCooldownTime(null)
         setShowScanner(true) // triggers camera restart
-        setScannerKey((prev) => prev + 1) // 🔁 ensure QRScanner re-renders
+        setScannerKey((prev) => prev + 1) // ­ƒöü ensure QRScanner re-renders
         router.push('/scan') // remove ?event param
     }
 
@@ -124,7 +124,7 @@ export default function ScanPage() {
                             <h2 className="text-2xl font-bold text-center mb-6">
                                 Scan Event QR Code
                             </h2>
-                            {/* 👇 scannerKey ensures camera resets properly */}
+                            {/* ­ƒæç scannerKey ensures camera resets properly */}
                             <QRScanner key={scannerKey} onScan={handleQRScan} />
                             <p className="text-center text-gray-600 text-sm mt-4">
                                 Point your camera at the event QR code

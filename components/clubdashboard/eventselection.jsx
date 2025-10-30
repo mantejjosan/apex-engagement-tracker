@@ -51,6 +51,21 @@ export default function EventSelectionSection({
 
       console.log('Fetched club events:', data)
       setEvents(data || [])
+
+      if (data && data.length === 1) {
+      const singleEventId = data[0].id
+      const storedSelections = JSON.parse(localStorage.getItem('event_selections') || '{}')
+      const updatedSelections = { ...storedSelections }
+
+      queue.forEach(studentId => {
+        updatedSelections[studentId] = [singleEventId]
+      })
+
+      setEventSelections(updatedSelections)
+      localStorage.setItem('event_selections', JSON.stringify(updatedSelections))
+      console.log(`✅ Automatically selected event '${data[0].event_name}' for all students.`)
+    }
+
     } catch (error) {
       console.error('Exception fetching events:', error)
     } finally {
@@ -104,7 +119,7 @@ export default function EventSelectionSection({
 
   if (loading) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border p-4">
+      <div className="bg-card rounded-xl shadow-sm border p-4">
         <h3 className="font-semibold mb-3">Event Selection</h3>
         <div className="text-center py-8 text-gray-400">Loading events...</div>
       </div>
@@ -113,7 +128,7 @@ export default function EventSelectionSection({
 
   if (events.length === 0) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border p-4">
+      <div className="bg-card rounded-xl shadow-sm border p-4">
         <h3 className="font-semibold mb-3">Event Selection</h3>
         <div className="text-center py-8 text-gray-400">
           <p>No events found for this club.</p>
@@ -124,12 +139,12 @@ export default function EventSelectionSection({
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border p-4">
+    <div className="bg-card rounded-xl shadow-sm border p-4">
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-semibold">Event Selection</h3>
         <button
           onClick={applyToAll}
-          className="flex items-center gap-1 text-xs bg-blue-500 text-white px-3 py-1.5 rounded-lg hover:bg-blue-600"
+          className="flex items-center gap-1 text-xs bg-amber-500 text-white px-3 py-1.5 rounded-lg hover:bg-amber-600"
         >
           <Copy size={14} />
           Apply to All
@@ -139,7 +154,7 @@ export default function EventSelectionSection({
       {/* Student Selector */}
       <div className="mb-4">
         <p className="text-xs text-gray-500 mb-2">Select events for:</p>
-        <div className="flex gap-2 overflow-x-auto pb-2">
+        <div className="flex gap-2 overflow-x-auto p-2 ">
           {queue.map(studentId => {
             // Match student data by partial ID (same logic as main queue)
             let student = studentData[studentId]
@@ -161,7 +176,7 @@ export default function EventSelectionSection({
                 onClick={() => setActiveStudentId(studentId)}
                 className={`
                   flex-shrink-0 relative
-                  ${activeStudentId === studentId ? 'ring-2 ring-blue-500 rounded-full' : ''}
+                  ${activeStudentId === studentId ? 'ring-2 ring-amber-500 rounded-full' : ''}
                 `}
               >
                 <StudentAvatar
@@ -172,7 +187,7 @@ export default function EventSelectionSection({
                   checkMark={selectionsCount > 0}
                 />
                 {selectionsCount > 0 && (
-                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-blue-500 text-white text-[10px] font-bold px-1.5 rounded-full">
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-amber-500 text-white text-[10px] font-bold px-1.5 rounded-full">
                     {selectionsCount}
                   </span>
                 )}
@@ -184,8 +199,8 @@ export default function EventSelectionSection({
 
       {/* Active Student Info */}
       {activeStudent && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-2 mb-3">
-          <p className="text-xs text-blue-700">
+        <div className="bg-primary-50 border border-amber-200 rounded-lg p-2 mb-3">
+          <p className="text-xs text-primary">
             <strong>{activeStudent.name}</strong> - {activeSelections.length} event(s) selected
           </p>
         </div>

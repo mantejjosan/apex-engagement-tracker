@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SquareMenu } from "lucide-react";
 import { Birdhouse, QrCode, UserStar } from "lucide-react";
+import { ChartNoAxesColumn } from "lucide-react";
 import PoweredBy from "./poweredby";
 const options = [
     {
@@ -17,6 +18,12 @@ const options = [
         name: 'Scan QR',
         description: 'Scan a Event',
         url: '/scan',
+    },
+    {
+        icon: <ChartNoAxesColumn />,
+        name: 'Leaderboard',
+        description: `Who's winning?`,
+        url: '/leaderboard'
     },
     {
         icon: <UserStar />,

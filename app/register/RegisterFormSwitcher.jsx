@@ -57,7 +57,7 @@ export default function RegisterFormSwitcher() {
   };
 
   if (loading) return (
-    <div className="mx-auto">
+    <div className="flex items-center justify-center">
         <Logo size="md" animated />
     </div>
     )

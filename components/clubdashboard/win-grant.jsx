@@ -49,13 +49,13 @@ export default function WinGrantSection({ queue, studentData }) {
 
   const getStatusColor = (status) => {
     if (status === true) return 'bg-green-50 border-green-300'
-    if (status === false) return 'bg-blue-50 border-blue-300'
+    if (status === false) return 'bg-primary/20 border-amber-300'
     return 'bg-gray-50 border-gray-200'
   }
 
   const getStatusIcon = (status) => {
     if (status === true) return <Trophy className="text-green-600" size={16} />
-    if (status === false) return <Users className="text-blue-600" size={16} />
+    if (status === false) return <Users className="text-amber-600" size={16} />
     return <X className="text-gray-400" size={16} />
   }
 
@@ -66,7 +66,7 @@ export default function WinGrantSection({ queue, studentData }) {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border p-4">
+    <div className = "bg-card rounded-xl shadow-sm border p-4">
       <div className="mb-4">
         <h3 className="font-semibold mb-1">Win/Participate Grant</h3>
         <p className="text-xs text-gray-500">
@@ -143,8 +143,8 @@ export default function WinGrantSection({ queue, studentData }) {
                     flex-1 py-2 rounded-lg font-medium text-sm transition-all
                     flex items-center justify-center gap-1
                     ${status === false
-                      ? 'bg-blue-500 text-white shadow-md'
-                      : 'bg-white border-2 border-blue-200 text-blue-700 hover:bg-blue-50'
+                      ? 'bg-amber-500 text-white shadow-md'
+                      : 'bg-white border-2 border-amber-200 text-amber-700 hover:bg-blue-50'
                     }
                   `}
                 >
@@ -183,7 +183,7 @@ export default function WinGrantSection({ queue, studentData }) {
               <div className="text-gray-600">Winners</div>
             </div>
             <div className="bg-blue-50 rounded p-2">
-              <div className="font-bold text-blue-700">
+              <div className="font-bold text-amber-700">
                 {Object.values(winStatus).filter(s => s === false).length}
               </div>
               <div className="text-gray-600">Participants</div>

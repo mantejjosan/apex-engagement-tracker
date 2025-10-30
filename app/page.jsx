@@ -6,7 +6,7 @@ import ParticipationHistory from '@/components/participationhistory'
 import Logo from '@/components/logo'
 import Navbar from '@/components/navbar'
 import { QrCode } from 'lucide-react'
-import LeaderBoard from '@/components/leaderboard'
+import LeaderBoard from '@/components/clubleaderboard'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
 

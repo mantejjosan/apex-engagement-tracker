@@ -4,6 +4,102 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 from qrcode.image.styledpil import StyledPilImage
 from qrcode.image.styles.moduledrawers import RoundedModuleDrawer
+from qrcode.image.styles.moduledrawers import SquareModuleDrawer
+import math
+
+class VercelStyleModuleDrawer:
+    """
+    Custom module drawer that creates Vercel-style QR codes with rounded edges
+    on the three positioning squares (markers) and standard square modules for
+    the rest of the QR code
+    """
+    def __init__(self, radius_ratio=0.3):
+        self.radius_ratio = radius_ratio
+
+    def drawrect(self, box, is_position_marker=False):
+        """
+        Draw a rectangle for a QR code module
+        """
+        # For position markers, draw with rounded corners
+        if is_position_marker:
+            # Draw a rounded rectangle
+            return lambda draw, x, y, size, color: draw.rounded_rectangle(
+                [(x, y), (x + size, y + size)],
+                radius=size * self.radius_ratio,
+                fill=color
+            )
+        else:
+            # For regular modules, draw standard square
+            return lambda draw, x, y, size, color: draw.rectangle(
+                [(x, y), (x + size, y + size)],
+                fill=color
+            )
+
+
+class VercelStyleImage(StyledPilImage):
+    """
+    Custom QR code image factory that applies Vercel-style rounded corners
+    to the position markers while keeping other modules as squares
+    """
+    def __init__(self, *args, **kwargs):
+        self.vercel_drawer = kwargs.pop('vercel_drawer', VercelStyleModuleDrawer())
+        super().__init__(*args, **kwargs)
+        
+    def drawrect(self, row, col, is_active=True):
+        """
+        Draw a module rectangle, with special handling for position markers
+        """
+        if not is_active:
+            return
+            
+        # Determine if this module is part of a position marker
+        is_position_marker = self._is_position_marker_module(row, col)
+        
+        # Get the appropriate drawing function from our custom drawer
+        draw_func = self.vercel_drawer.drawrect(None, is_position_marker)
+        
+        # Calculate coordinates
+        x = (col + self.border) * self.box_size
+        y = (row + self.border) * self.box_size
+        size = self.box_size
+        
+        # Draw the module
+        draw_func(self._img, x, y, size, self.fill_color)
+        
+    def _is_position_marker_module(self, row, col):
+        """
+        Determine if a module at (row, col) is part of one of the three position markers
+        """
+        # Position markers are located at fixed positions in QR codes:
+        # 1. Top-left marker (always at position (0,0))
+        # 2. Top-right marker (at position (0, size-7))
+        # 3. Bottom-left marker (at position (size-7, 0))
+        
+        size = self.width - 2 * self.border  # Size without border
+        modules_count = size // self.box_size  # Number of modules
+        
+        # Check if module is in top-left position marker area (7x7 modules)
+        if row < 7 and col < 7:
+            # But not in the inner 3x3 "hole"
+            if row >= 2 and row < 5 and col >= 2 and col < 5:
+                return False
+            return True
+            
+        # Check if module is in top-right position marker area (7x7 modules)
+        if row < 7 and col >= modules_count - 7:
+            # But not in the inner 3x3 "hole"
+            if row >= 2 and row < 5 and col >= modules_count - 5 and col < modules_count - 2:
+                return False
+            return True
+            
+        # Check if module is in bottom-left position marker area (7x7 modules)
+        if row >= modules_count - 7 and col < 7:
+            # But not in the inner 3x3 "hole"
+            if row >= modules_count - 5 and row < modules_count - 2 and col >= 2 and col < 5:
+                return False
+            return True
+            
+        return False
 
 # ============================================
 # CONFIGURATION - EDIT THESE
@@ -196,13 +292,13 @@ def generate_qr_codes():
         print(f"   Please create the directory and add club logos")
         return
     
-    print("🚀 Apex Fest QR Code Generator (Enhanced with Rounded Modules)")
+    print("🚀 Apex Fest QR Code Generator (Enhanced with Vercel-style Position Markers)")
     print("=" * 60)
     print(f"📱 App URL: {APP_URL}")
     print(f"📁 Output folder: {OUTPUT_DIR}/")
     print(f"🎨 Logo folder: {LOGO_DIR}/")
-    print(f"📐 Logo size: {int(LOGO_SIZE_PERCENT * 100)}% of QR code")
-    print(f"✨ QR Style: Rounded/Globby modules\n")
+    print(f"� Logo size: {int(LOGO_SIZE_PERCENT * 100)}% of QR code")
+    print(f"✨ QR Style: Vercel-style with rounded position markers\n")
     
     # Parse events data
     events = []
@@ -254,10 +350,10 @@ def generate_qr_codes():
             qr.add_data(qr_url)
             qr.make(fit=True)
             
-            # Create QR code image with rounded modules (globby style)
+            # Create QR code image with Vercel-style position markers
             qr_img = qr.make_image(
-                image_factory=StyledPilImage,
-                module_drawer=RoundedModuleDrawer(),
+                image_factory=VercelStyleImage,
+                vercel_drawer=VercelStyleModuleDrawer(),
                 fill_color="black",
                 back_color="white"
             )
@@ -298,8 +394,8 @@ def generate_qr_codes():
     print("\n" + "=" * 60)
     print(f"🎉 Successfully generated {generated_count} QR codes!")
     print(f"📁 Saved in: {OUTPUT_DIR}/")
-    print("\n💡 Tips:")
-    print("  • QR codes now have smooth, rounded 'globby' modules")
+    print("\n� Tips:")
+    print("  • QR codes now have Vercel-style position markers with rounded corners")
     print("  • Each has club logo in center with circular design")
     print("  • Event names in bold, club names in faded gray below")
     print("  • Test by scanning with your phone camera or Google Lens")

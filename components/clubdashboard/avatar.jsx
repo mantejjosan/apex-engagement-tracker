@@ -31,7 +31,6 @@ export default function StudentAvatar({
     xl: 18,
   };
 
-  // Calculate initials from name
   const getInitials = (name) => {
     if (!name) return "?";
     return name
@@ -44,7 +43,6 @@ export default function StudentAvatar({
 
   const initials = getInitials(name);
 
-  // Generate random pastel color based on initials
   const getAvatarColor = (initials) => {
     const colors = [
       'bg-pink-200 text-pink-700 border-pink-400',
@@ -60,19 +58,37 @@ export default function StudentAvatar({
     return colors[index];
   };
 
+  // Close tooltip when clicking outside (optional improvement)
+  const handleDocumentClick = (e) => {
+    if (!e.target.closest(".avatar-container")) {
+      setShowTooltip(false);
+    }
+  };
+
+  // Attach listener only when tooltip is open
+  if (typeof window !== "undefined") {
+    if (showTooltip) {
+      document.addEventListener("click", handleDocumentClick);
+    } else {
+      document.removeEventListener("click", handleDocumentClick);
+    }
+  }
+
   return (
-    <div 
-      className="relative inline-block"
+    <div
+      className="relative inline-block avatar-container"
       onMouseEnter={() => setShowTooltip(true)}
       onMouseLeave={() => setShowTooltip(false)}
+      onClick={() => setShowTooltip((prev) => !prev)} // ✅ mobile/tap support
     >
       {/* Tooltip */}
       {showTooltip && (name || institute || points > 0) && (
         <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-black text-white text-sm rounded-lg whitespace-nowrap z-10">
           {name && <div className="font-semibold">{name}</div>}
           {institute && <div className="text-xs opacity-80">{institute}</div>}
-          {points > 0 && <div className="text-yellow-400 font-bold">{points} points</div>}
-          {/* Tooltip arrow */}
+          {points > 0 && (
+            <div className="text-yellow-400 font-bold">{points} points</div>
+          )}
           <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1">
             <div className="border-4 border-transparent border-t-black"></div>
           </div>
@@ -106,98 +122,6 @@ export default function StudentAvatar({
             <Check size={checkIconSizes[size]} className="text-white" strokeWidth={3} />
           </div>
         )}
-      </div>
-    </div>
-  );
-}
-
-// Demo
-function App() {
-  return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-4xl mx-auto space-y-8">
-        <h1 className="text-3xl font-bold mb-8">Student Avatar Component</h1>
-        
-        {/* Size variants */}
-        <div>
-          <h2 className="text-xl font-semibold mb-4">Sizes</h2>
-          <div className="flex items-center gap-4">
-            <StudentAvatar 
-              size="sm" 
-              name="Alice" 
-              institute="GNDEC" 
-              points={120}
-            />
-            <StudentAvatar 
-              size="md" 
-              name="Bob Kumar" 
-              institute="GNDEC" 
-              points={250}
-            />
-            <StudentAvatar 
-              size="lg" 
-              name="Charlie" 
-              institute="GNDEC" 
-              points={180}
-            />
-            <StudentAvatar 
-              size="xl" 
-              name="David Singh" 
-              institute="GNDEC" 
-              points={320}
-            />
-          </div>
-        </div>
-
-        {/* With checkmarks */}
-        <div>
-          <h2 className="text-xl font-semibold mb-4">With Check Marks</h2>
-          <div className="flex items-center gap-4">
-            <StudentAvatar 
-              size="sm" 
-              name="Alice" 
-              institute="GNDEC" 
-              points={120}
-              checkMark={true}
-            />
-            <StudentAvatar 
-              size="md" 
-              name="Krishna Patel" 
-              institute="Punjab Engineering College" 
-              points={250}
-              checkMark={true}
-            />
-            <StudentAvatar 
-              size="lg" 
-              name="Mandeep" 
-              institute="GNDEC Ludhiana" 
-              points={180}
-              checkMark={true}
-            />
-          </div>
-        </div>
-
-        {/* Different names for color variety */}
-        <div>
-          <h2 className="text-xl font-semibold mb-4">Color Variety</h2>
-          <div className="flex items-center gap-4">
-            <StudentAvatar name="Alice" institute="GNDEC" points={100} />
-            <StudentAvatar name="Bob" institute="GNDEC" points={200} />
-            <StudentAvatar name="Charlie" institute="GNDEC" points={150} />
-            <StudentAvatar name="David" institute="GNDEC" points={300} />
-            <StudentAvatar name="Emma" institute="GNDEC" points={250} />
-            <StudentAvatar name="Frank" institute="GNDEC" points={180} />
-            <StudentAvatar name="Grace" institute="GNDEC" points={220} />
-            <StudentAvatar name="Henry" institute="GNDEC" points={190} />
-          </div>
-        </div>
-
-        {/* Hover message */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <p className="text-blue-800">
-            💡 <strong>Tip:</strong> Hover over any avatar to see the tooltip with name, institute, and points!
-          </p>
-        </div>
       </div>
     </div>
   );

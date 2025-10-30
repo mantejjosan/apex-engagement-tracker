@@ -36,7 +36,7 @@ export async function POST(request) {
     // 1. Check if event exists
     const { data: event, error: eventError } = await supabase
       .from('events')
-      .select('id, name, description')
+      .select('id, event_name, description')
       .eq('id', eventId)
       .single()
 
